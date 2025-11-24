@@ -31,7 +31,7 @@ blueprint:
       selector:
         text:
           multiline: true
-      default: "Generate a single funny message. Must be under 80 characters. Include 1-2 emojis. Return ONLY the message text."
+      default: Generate a single funny message. Must be under 80 characters. Include 1-2 emojis. Return ONLY the message text.
     
     phone_number:
       name: Target Phone Number
