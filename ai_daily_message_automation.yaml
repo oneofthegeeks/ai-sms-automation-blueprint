@@ -4,6 +4,10 @@ blueprint:
     Sends daily AI-generated personalized messages via SMS using Google AI.
     Tracks message history in input_text helpers for dashboard display.
     Perfect for daily reminders, trash talk, motivational messages, etc.
+    
+    ⚠️ IMPORTANT: You MUST create 7 input_text helpers BEFORE using this blueprint!
+    For multiple automations, name helpers to match each automation (e.g., golf_message_1-7, workout_message_1-7).
+    Go to Settings → Devices & Services → Helpers → Create Helper → Text (Max Length: 255)
   domain: automation
   source_url: https://github.com/oneofthegeeks/HomeAssistant/blob/master/blueprints/automation/ai_daily_message_automation.yaml
   input:
@@ -52,7 +56,10 @@ blueprint:
     
     history_slot_1:
       name: Message History Slot 1 (Latest)
-      description: Input text helper to store the latest message
+      description: |
+        Input text helper to store the latest message.
+        ⚠️ Must be created BEFORE using this blueprint!
+        For multiple automations, use unique names (e.g., golf_message_1, workout_message_1)
       selector:
         entity:
           domain: input_text

@@ -2,6 +2,12 @@
 
 Send personalized, AI-generated messages daily via SMS with automatic message history tracking.
 
+## 📚 Documentation
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Fast setup guide
+- **[EXAMPLES.md](EXAMPLES.md)** - Configuration examples
+- **[HELPER_SETUP_GUIDE.md](HELPER_SETUP_GUIDE.md)** - ⚠️ Essential guide for creating input text helpers (especially for multiple automations)
+
 ## Features
 
 - ✅ **AI-Generated Content** - Fresh, unique messages every day using Google AI, OpenAI, Ollama, or any Home Assistant conversation agent
@@ -23,6 +29,13 @@ Send personalized, AI-generated messages daily via SMS with automatic message hi
 - 🌱 Habit-building affirmations
 
 ## Prerequisites
+
+> ⚠️ **CRITICAL**: You MUST create 7 input_text helpers for EACH automation BEFORE configuring the blueprint!
+> 
+> **For multiple automations**, use descriptive names to keep them organized:
+> - Golf automation: `golf_message_1` through `golf_message_7`
+> - Workout automation: `workout_message_1` through `workout_message_7`
+> - Motivation automation: `motivation_message_1` through `motivation_message_7`
 
 ### Required
 
@@ -65,20 +78,35 @@ Send personalized, AI-generated messages daily via SMS with automatic message hi
 1. Copy `ai_daily_message_automation.yaml` to `/config/blueprints/automation/`
 2. Restart Home Assistant
 
-### Step 2: Create Input Text Helpers
+### Step 2: Create Input Text Helpers ⚠️ REQUIRED!
 
 Go to **Settings → Devices & Services → Helpers → Create Helper → Text**
 
-Create 7 text helpers with these names (or customize):
-- `Message History 1`
-- `Message History 2`
-- `Message History 3`
-- `Message History 4`
-- `Message History 5`
-- `Message History 6`
-- `Message History 7`
+**Create 7 text helpers** for this automation. Set **Max Length to 255** for each.
 
-**Important:** Set Max Length to 255 for each.
+#### Naming Convention (IMPORTANT for Multiple Automations)
+
+If you're creating **only one automation**, simple names work:
+- `Message History 1` through `Message History 7`
+
+**If creating multiple automations**, use descriptive prefixes to keep them organized:
+
+**Golf Trash Talk Automation:**
+- `Golf Message 1` (entity: `input_text.golf_message_1`)
+- `Golf Message 2` (entity: `input_text.golf_message_2`)
+- ... through `Golf Message 7`
+
+**Workout Motivation Automation:**
+- `Workout Message 1` (entity: `input_text.workout_message_1`)
+- `Workout Message 2` (entity: `input_text.workout_message_2`)
+- ... through `Workout Message 7`
+
+**Daily Motivation Automation:**
+- `Motivation Message 1` (entity: `input_text.motivation_message_1`)
+- ... through `Motivation Message 7`
+
+> 💡 **Tip**: The friendly name becomes the entity_id (spaces become underscores, lowercase).
+> Choose names that clearly identify which automation they belong to!
 
 ### Step 3: Create Automation from Blueprint
 
@@ -92,10 +120,10 @@ Create 7 text helpers with these names (or customize):
    - **AI Prompt**: Customize your message generation prompt
    - **Phone Numbers**: Target and sender numbers
    - **SMS Service**: Your SMS service call (e.g., `goto_sms.send_sms`)
-   - **History Slots**: Select your 7 input_text helpers
+   - **History Slots**: Select the 7 input_text helpers you created in Step 2 (matching this automation's purpose)
    - **Max Length**: Message character limit (80 for short, 160 for standard SMS)
 
-5. Click **Save**
+5. Click **Save** and give your automation a descriptive name (e.g., "Daily Golf Trash Talk" or "Morning Workout Motivation")
 
 ## Configuration Examples
 

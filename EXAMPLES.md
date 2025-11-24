@@ -1,6 +1,16 @@
 # Example Configurations for AI Daily Message Blueprint
 
+> **⚠️ IMPORTANT**: Before using any configuration, you must create 7 input_text helpers for EACH automation!
+> 
+> Notice how each example below uses uniquely named helpers (e.g., `golf_message_1-7`, `motivation_1-7`, `workout_1-7`).
+> This allows you to run multiple automations simultaneously without conflicts.
+> 
+> **To create helpers**: Settings → Devices & Services → Helpers → Create Helper → Text (Max Length: 255)
+
 ## Configuration 1: Golf Trash Talk
+
+**Required Helpers**: Create these 7 text helpers first:
+- `Golf Message 1` through `Golf Message 7` (entities: `input_text.golf_message_1` through `input_text.golf_message_7`)
 
 ```yaml
 name: Daily Golf Trash Talk
@@ -31,6 +41,9 @@ use_blueprint:
 
 ## Configuration 2: Morning Motivation
 
+**Required Helpers**: Create these 7 text helpers first:
+- `Motivation 1` through `Motivation 7` (entities: `input_text.motivation_1` through `input_text.motivation_7`)
+
 ```yaml
 name: Daily Morning Motivation
 description: Sends inspiring message every morning at 6 AM
@@ -60,6 +73,9 @@ use_blueprint:
 
 ## Configuration 3: Evening Workout Reminder
 
+**Required Helpers**: Create these 7 text helpers first:
+- `Workout 1` through `Workout 7` (entities: `input_text.workout_1` through `input_text.workout_7`)
+
 ```yaml
 name: Evening Workout Reminder
 description: Funny workout reminder at 5 PM
@@ -75,8 +91,8 @@ use_blueprint:
       Include gym/fitness emojis.
       Start with "Hey" or "Time to".
       Return ONLY the message text.
-    phone_number: "15551234567"
-    sender_id: "15559876543"
+    phone_number: "+1234567890"
+    sender_id: "+1987654321"
     sms_service: "goto_sms.send_sms"
     history_slot_1: input_text.workout_1
     history_slot_2: input_text.workout_2
