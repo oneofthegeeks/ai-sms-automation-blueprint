@@ -195,11 +195,13 @@ Or add this to `scripts.yaml`:
 ```yaml
 test_ai_message:
   alias: Test AI Message
+  description: Manually trigger AI message generation and send
+  mode: single
   sequence:
-  - service: automation.trigger
-    data:
-      entity_id: automation.YOUR_AUTOMATION_NAME_HERE
-      skip_condition: true
+    - data:
+        entity_id: automation.YOUR_AUTOMATION_NAME_HERE
+        skip_condition: true
+      action: automation.trigger
 ```
 
 Then add a button to your dashboard:
