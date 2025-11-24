@@ -188,19 +188,18 @@ show_header_toggle: false
 
 ### Create a Test Script
 
-Add this to `scripts.yaml`:
+Go to **Settings → Automations & Scenes → Scripts → Add Script**
+
+Or add this to `scripts.yaml`:
 
 ```yaml
 test_ai_message:
   alias: Test AI Message
-  description: Manually trigger AI message generation and send
-  mode: single
   sequence:
-    - service: automation.trigger
-      target:
-        entity_id: automation.YOUR_AUTOMATION_NAME_HERE
-      data:
-        skip_condition: true
+  - service: automation.trigger
+    data:
+      entity_id: automation.YOUR_AUTOMATION_NAME_HERE
+      skip_condition: true
 ```
 
 Then add a button to your dashboard:
