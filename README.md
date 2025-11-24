@@ -197,8 +197,9 @@ test_ai_message:
   mode: single
   sequence:
     - service: automation.trigger
-      data:
+      target:
         entity_id: automation.YOUR_AUTOMATION_NAME_HERE
+      data:
         skip_condition: true
 ```
 
