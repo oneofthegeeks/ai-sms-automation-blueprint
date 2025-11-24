@@ -1,0 +1,188 @@
+blueprint:
+  name: AI-Powered Daily Message Automation
+  description: |
+    Sends daily AI-generated personalized messages via SMS using Google AI.
+    Tracks message history in input_text helpers for dashboard display.
+    Perfect for daily reminders, trash talk, motivational messages, etc.
+  domain: automation
+  source_url: https://github.com/oneofthegeeks/HomeAssistant/blob/master/blueprints/automation/ai_daily_message_automation.yaml
+  input:
+    time_trigger:
+      name: Send Time
+      description: What time to send the daily message
+      selector:
+        time:
+      default: "09:00:00"
+    
+    ai_agent:
+      name: AI Conversation Agent
+      description: Select your AI conversation agent (Google AI, OpenAI, Ollama, etc.)
+      selector:
+        conversation_agent:
+      default: conversation.google_ai_conversation
+    
+    ai_prompt:
+      name: AI Prompt
+      description: The prompt for the AI to generate messages. Be specific about tone, length, and requirements.
+      selector:
+        text:
+          multiline: true
+      default: "Generate a single funny message. Must be under 80 characters. Include 1-2 emojis. Return ONLY the message text."
+    
+    phone_number:
+      name: Target Phone Number
+      description: Phone number to send SMS to (format depends on your SMS service)
+      selector:
+        text:
+      default: "18005551234"
+    
+    sender_id:
+      name: Sender ID / From Number
+      description: Your SMS sender phone number or ID
+      selector:
+        text:
+      default: "18005551234"
+    
+    sms_service:
+      name: SMS Service
+      description: The SMS service to use (goto_sms, twilio, etc.)
+      selector:
+        text:
+      default: "goto_sms.send_sms"
+    
+    history_slot_1:
+      name: Message History Slot 1 (Latest)
+      description: Input text helper to store the latest message
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_2:
+      name: Message History Slot 2
+      description: Input text helper to store message 2
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_3:
+      name: Message History Slot 3
+      description: Input text helper to store message 3
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_4:
+      name: Message History Slot 4
+      description: Input text helper to store message 4
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_5:
+      name: Message History Slot 5
+      description: Input text helper to store message 5
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_6:
+      name: Message History Slot 6
+      description: Input text helper to store message 6
+      selector:
+        entity:
+          domain: input_text
+    
+    history_slot_7:
+      name: Message History Slot 7 (Oldest)
+      description: Input text helper to store message 7
+      selector:
+        entity:
+          domain: input_text
+    
+    max_message_length:
+      name: Maximum Message Length
+      description: Truncate messages to this length (important for SMS limits)
+      selector:
+        number:
+          min: 20
+          max: 160
+          step: 10
+          mode: slider
+      default: 80
+
+mode: single
+max_exceeded: silent
+
+trigger:
+  - platform: time
+    at: !input time_trigger
+
+action:
+  - action: conversation.process
+    data:
+      agent_id: !input ai_agent
+      text: !input ai_prompt
+    response_variable: ai_message
+  
+  - variables:
+      raw_message: '{{ ai_message.response.speech.plain.speech | trim }}'
+      message_length: !input max_message_length
+      new_message: '{{ raw_message[:message_length] if raw_message | length > message_length else raw_message }}'
+      timestamp: '{{ now().strftime(''%m/%d %H:%M'') }}'
+      new_entry: '{{ timestamp + '': '' + new_message }}'
+      slot_1: !input history_slot_1
+      slot_2: !input history_slot_2
+      slot_3: !input history_slot_3
+      slot_4: !input history_slot_4
+      slot_5: !input history_slot_5
+      slot_6: !input history_slot_6
+      slot_7: !input history_slot_7
+  
+  - action: !input sms_service
+    data:
+      message: '{{ new_message }}'
+      target: !input phone_number
+      sender_id: !input sender_id
+  
+  # Shift messages through history slots (7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1)
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_7 }}'
+    data:
+      value: '{{ states(slot_6) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_6 }}'
+    data:
+      value: '{{ states(slot_5) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_5 }}'
+    data:
+      value: '{{ states(slot_4) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_4 }}'
+    data:
+      value: '{{ states(slot_3) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_3 }}'
+    data:
+      value: '{{ states(slot_2) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_2 }}'
+    data:
+      value: '{{ states(slot_1) }}'
+  
+  - action: input_text.set_value
+    target:
+      entity_id: '{{ slot_1 }}'
+    data:
+      value: '{{ new_entry }}'
