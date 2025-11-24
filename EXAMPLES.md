@@ -3,7 +3,7 @@
 ## Configuration 1: Golf Trash Talk
 
 ```yaml
-name: Daily Golf Trash Talk - Eli
+name: Daily Golf Trash Talk
 description: Sends daily golf swing trash talk at 9 AM
 use_blueprint:
   path: ai_daily_message_automation.yaml
@@ -11,13 +11,13 @@ use_blueprint:
     time_trigger: "09:00:00"
     ai_agent: conversation.google_ai_conversation
     ai_prompt: |
-      Generate a single funny golf trash talk text message for Eli about his fast swing. 
+      Generate a single funny golf trash talk text message for [YOUR_NAME] about his fast swing. 
       Must be under 80 characters. 
-      Start with Morning/Hey/Good morning Eli. 
+      Start with Morning/Hey/Good morning [YOUR_NAME]. 
       Include 1-2 emojis. 
       Return ONLY the message text.
-    phone_number: "18018676322"
-    sender_id: "18018107448"
+    phone_number: "+1234567890"
+    sender_id: "+1987654321"
     sms_service: "goto_sms.send_sms"
     history_slot_1: input_text.golf_message_1
     history_slot_2: input_text.golf_message_2
@@ -45,8 +45,8 @@ use_blueprint:
       Be uplifting and energetic.
       Include 1-2 motivational emojis.
       Return ONLY the message text.
-    phone_number: "15551234567"
-    sender_id: "15559876543"
+    phone_number: "+1234567890"
+    sender_id: "+1987654321"
     sms_service: "goto_sms.send_sms"
     history_slot_1: input_text.motivation_1
     history_slot_2: input_text.motivation_2

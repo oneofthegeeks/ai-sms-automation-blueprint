@@ -102,9 +102,9 @@ Create 7 text helpers with these names (or customize):
 ### Golf Trash Talk Example
 ```yaml
 AI Prompt: |
-  Generate a single funny golf trash talk text message for Eli about his fast swing. 
+  Generate a single funny golf trash talk text message for [YOUR_NAME] about his fast swing. 
   Must be under 80 characters. 
-  Start with Morning/Hey/Good morning Eli. 
+  Start with Morning/Hey/Good morning [YOUR_NAME]. 
   Include 1-2 emojis. 
   Return ONLY the message text.
 
