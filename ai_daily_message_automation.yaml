@@ -117,6 +117,17 @@ blueprint:
           mode: slider
       default: 80
 
+    message_counter:
+      name: Message Counter (Optional)
+      description: |
+        Optional counter helper to track total messages sent.
+        Leave empty to disable statistics tracking.
+        See REPORTING.md for setup instructions.
+      selector:
+        entity:
+          domain: counter
+      default: ""
+
 mode: single
 max_exceeded: silent
 
@@ -144,6 +155,7 @@ action:
       slot_5: !input history_slot_5
       slot_6: !input history_slot_6
       slot_7: !input history_slot_7
+      counter_entity: !input message_counter
   
   - action: !input sms_service
     data:
@@ -193,3 +205,13 @@ action:
       entity_id: '{{ slot_1 }}'
     data:
       value: '{{ new_entry }}'
+
+  # Optional: Increment message counter for statistics
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ counter_entity != '' }}"
+        sequence:
+          - action: counter.increment
+            target:
+              entity_id: "{{ counter_entity }}"

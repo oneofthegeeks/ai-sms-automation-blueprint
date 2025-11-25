@@ -1,0 +1,311 @@
+# Example Scripts for AI Message Automation
+# Copy these to your scripts.yaml or create via the UI
+# Go to: Settings → Automations & Scenes → Scripts → Add Script
+
+# ==============================================================================
+# Test Scripts - Manually trigger message automations
+# ==============================================================================
+
+test_golf_message:
+  alias: Test Golf Message
+  description: Manually trigger golf message automation for testing
+  mode: single
+  icon: mdi:golf
+  sequence:
+    - action: automation.trigger
+      target:
+        entity_id: automation.daily_golf_trash_talk
+      data:
+        skip_condition: true
+
+test_workout_message:
+  alias: Test Workout Message
+  description: Manually trigger workout message automation
+  mode: single
+  icon: mdi:dumbbell
+  sequence:
+    - action: automation.trigger
+      target:
+        entity_id: automation.evening_workout_reminder
+      data:
+        skip_condition: true
+
+test_motivation_message:
+  alias: Test Motivation Message
+  description: Manually trigger motivation message automation
+  mode: single
+  icon: mdi:heart
+  sequence:
+    - action: automation.trigger
+      target:
+        entity_id: automation.daily_morning_motivation
+      data:
+        skip_condition: true
+
+# ==============================================================================
+# Export Scripts - Export message history data
+# ==============================================================================
+
+export_golf_messages:
+  alias: Export Golf Message History
+  description: Export golf message history to persistent notification
+  mode: single
+  icon: mdi:download
+  sequence:
+    - action: persistent_notification.create
+      data:
+        title: "📥 Golf Message Export"
+        notification_id: golf_export
+        message: |
+          **Golf Message History Export**
+          Generated: {{ now().strftime('%Y-%m-%d %H:%M') }}
+
+          ---
+
+          **Message 1 (Latest):**
+          {{ states('input_text.golf_message_1') }}
+
+          **Message 2:**
+          {{ states('input_text.golf_message_2') }}
+
+          **Message 3:**
+          {{ states('input_text.golf_message_3') }}
+
+          **Message 4:**
+          {{ states('input_text.golf_message_4') }}
+
+          **Message 5:**
+          {{ states('input_text.golf_message_5') }}
+
+          **Message 6:**
+          {{ states('input_text.golf_message_6') }}
+
+          **Message 7 (Oldest):**
+          {{ states('input_text.golf_message_7') }}
+
+          ---
+
+          **Statistics:**
+          - Total Sent: {{ states('counter.golf_messages_sent') }}
+          - Last Sent: {{ states('sensor.golf_last_message_time') }}
+
+export_all_messages:
+  alias: Export All Message Histories
+  description: Export all message automation histories
+  mode: single
+  icon: mdi:database-export
+  sequence:
+    - action: persistent_notification.create
+      data:
+        title: "📊 Complete Message Export"
+        notification_id: all_messages_export
+        message: |
+          **Complete Message History Export**
+          Generated: {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
+
+          ═══════════════════════════════════════
+
+          ## 🏌️ Golf Messages
+
+          Latest: {{ states('input_text.golf_message_1') }}
+          {{ states('input_text.golf_message_2') }}
+          {{ states('input_text.golf_message_3') }}
+          Total: {{ states('counter.golf_messages_sent') }}
+
+          ═══════════════════════════════════════
+
+          ## 💪 Workout Messages
+
+          Latest: {{ states('input_text.workout_message_1') }}
+          {{ states('input_text.workout_message_2') }}
+          {{ states('input_text.workout_message_3') }}
+          Total: {{ states('counter.workout_messages_sent') }}
+
+          ═══════════════════════════════════════
+
+          ## ❤️ Motivation Messages
+
+          Latest: {{ states('input_text.motivation_message_1') }}
+          {{ states('input_text.motivation_message_2') }}
+          {{ states('input_text.motivation_message_3') }}
+          Total: {{ states('counter.motivation_messages_sent') }}
+
+# ==============================================================================
+# Reset Scripts - Clear counters and history
+# ==============================================================================
+
+reset_golf_counter:
+  alias: Reset Golf Message Counter
+  description: Reset the golf message counter to zero
+  mode: single
+  icon: mdi:restore
+  sequence:
+    - action: counter.reset
+      target:
+        entity_id: counter.golf_messages_sent
+    - action: persistent_notification.create
+      data:
+        title: "✅ Counter Reset"
+        message: "Golf message counter has been reset to 0"
+        notification_id: counter_reset
+
+clear_golf_history:
+  alias: Clear Golf Message History
+  description: Clear all golf message history (use with caution!)
+  mode: single
+  icon: mdi:delete-sweep
+  sequence:
+    - action: input_text.set_value
+      target:
+        entity_id:
+          - input_text.golf_message_1
+          - input_text.golf_message_2
+          - input_text.golf_message_3
+          - input_text.golf_message_4
+          - input_text.golf_message_5
+          - input_text.golf_message_6
+          - input_text.golf_message_7
+      data:
+        value: ""
+    - action: persistent_notification.create
+      data:
+        title: "🗑️ History Cleared"
+        message: "Golf message history has been cleared"
+        notification_id: history_cleared
+
+# ==============================================================================
+# Status Scripts - Check automation status
+# ==============================================================================
+
+check_message_status:
+  alias: Check All Message Automations Status
+  description: Display status of all message automations
+  mode: single
+  icon: mdi:information
+  sequence:
+    - action: persistent_notification.create
+      data:
+        title: "📋 Message Automation Status"
+        notification_id: status_check
+        message: |
+          **Message Automation Status Report**
+          Generated: {{ now().strftime('%Y-%m-%d %H:%M') }}
+
+          ---
+
+          ## Golf Automation
+          - Status: {{ states('automation.daily_golf_trash_talk') }}
+          - Last Run: {{ state_attr('automation.daily_golf_trash_talk', 'last_triggered') }}
+          - Messages Sent: {{ states('counter.golf_messages_sent') }}
+          - Latest Message: {{ states('input_text.golf_message_1').split(': ', 1)[1] if states('input_text.golf_message_1') else 'None' }}
+
+          ## Workout Automation
+          - Status: {{ states('automation.evening_workout_reminder') }}
+          - Last Run: {{ state_attr('automation.evening_workout_reminder', 'last_triggered') }}
+          - Messages Sent: {{ states('counter.workout_messages_sent') }}
+          - Latest Message: {{ states('input_text.workout_message_1').split(': ', 1)[1] if states('input_text.workout_message_1') else 'None' }}
+
+          ## Motivation Automation
+          - Status: {{ states('automation.daily_morning_motivation') }}
+          - Last Run: {{ state_attr('automation.daily_morning_motivation', 'last_triggered') }}
+          - Messages Sent: {{ states('counter.motivation_messages_sent') }}
+          - Latest Message: {{ states('input_text.motivation_message_1').split(': ', 1)[1] if states('input_text.motivation_message_1') else 'None' }}
+
+# ==============================================================================
+# Notification Scripts - Send reports
+# ==============================================================================
+
+send_daily_summary:
+  alias: Send Daily Message Summary
+  description: Send a notification with today's message summary
+  mode: single
+  icon: mdi:email-newsletter
+  sequence:
+    - action: notify.mobile_app
+      data:
+        title: "📊 Daily Message Summary"
+        message: |
+          Messages sent today: {{ states('sensor.golf_messages_today') }}
+          Total sent: {{ states('counter.golf_messages_sent') }}
+
+          Latest message:
+          {{ states('input_text.golf_message_1') }}
+        data:
+          group: message_summary
+          tag: daily_summary
+
+send_weekly_report:
+  alias: Send Weekly Message Report
+  description: Send a detailed weekly message report
+  mode: single
+  icon: mdi:chart-bar
+  sequence:
+    - action: notify.mobile_app
+      data:
+        title: "📈 Weekly Message Report"
+        message: |
+          Week of {{ now().strftime('%B %d, %Y') }}
+
+          Messages this week: {{ states('sensor.golf_messages_this_week') }}
+          Messages this month: {{ states('sensor.golf_messages_this_month') }}
+          All-time total: {{ states('counter.golf_messages_sent') }}
+
+          Success rate: {{ states('sensor.golf_message_success_rate') }}%
+          Average length: {{ states('sensor.golf_avg_message_length') }} chars
+
+          Keep up the great work! 🎉
+        data:
+          group: message_reports
+          tag: weekly_report
+          priority: high
+
+# ==============================================================================
+# Backup Scripts - Create backups of message data
+# ==============================================================================
+
+backup_message_data:
+  alias: Backup Message Data
+  description: Create a backup of all message data and counters
+  mode: single
+  icon: mdi:backup-restore
+  sequence:
+    # Export to persistent notification
+    - action: persistent_notification.create
+      data:
+        title: "💾 Message Data Backup"
+        notification_id: message_backup
+        message: |
+          **Message Data Backup**
+          Created: {{ now().isoformat() }}
+
+          # Counters
+          golf_messages_sent: {{ states('counter.golf_messages_sent') }}
+          workout_messages_sent: {{ states('counter.workout_messages_sent') }}
+          motivation_messages_sent: {{ states('counter.motivation_messages_sent') }}
+
+          # Golf Messages
+          golf_message_1: {{ states('input_text.golf_message_1') }}
+          golf_message_2: {{ states('input_text.golf_message_2') }}
+          golf_message_3: {{ states('input_text.golf_message_3') }}
+          golf_message_4: {{ states('input_text.golf_message_4') }}
+          golf_message_5: {{ states('input_text.golf_message_5') }}
+          golf_message_6: {{ states('input_text.golf_message_6') }}
+          golf_message_7: {{ states('input_text.golf_message_7') }}
+
+          # Workout Messages
+          workout_message_1: {{ states('input_text.workout_message_1') }}
+          workout_message_2: {{ states('input_text.workout_message_2') }}
+          workout_message_3: {{ states('input_text.workout_message_3') }}
+          workout_message_4: {{ states('input_text.workout_message_4') }}
+          workout_message_5: {{ states('input_text.workout_message_5') }}
+          workout_message_6: {{ states('input_text.workout_message_6') }}
+          workout_message_7: {{ states('input_text.workout_message_7') }}
+
+          # Motivation Messages
+          motivation_message_1: {{ states('input_text.motivation_message_1') }}
+          motivation_message_2: {{ states('input_text.motivation_message_2') }}
+          motivation_message_3: {{ states('input_text.motivation_message_3') }}
+          motivation_message_4: {{ states('input_text.motivation_message_4') }}
+          motivation_message_5: {{ states('input_text.motivation_message_5') }}
+          motivation_message_6: {{ states('input_text.motivation_message_6') }}
+          motivation_message_7: {{ states('input_text.motivation_message_7') }}

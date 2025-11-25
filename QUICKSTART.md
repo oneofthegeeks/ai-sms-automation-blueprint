@@ -40,7 +40,17 @@ Or manually copy `ai_daily_message_automation.yaml` to `/config/blueprints/autom
    - **Max Length**: 80
 4. Click **Save**
 
-### 4. Add to Dashboard (1 minute)
+### 4. Add Statistics (Optional - 2 minutes)
+
+Want to track how many messages you've sent?
+
+1. **Settings → Devices & Services → Helpers → Create Helper → Counter**
+2. Name: `Message Counter` (entity: `input_text.message_counter`)
+3. In your automation settings, select this counter for "Message Counter (Optional)"
+
+See [REPORTING.md](REPORTING.md) for advanced statistics and analytics.
+
+### 5. Add to Dashboard (1 minute)
 
 Edit dashboard → Add Card → Entities → Add:
 - input_text.message_history_1
@@ -51,12 +61,20 @@ Edit dashboard → Add Card → Entities → Add:
 - input_text.message_history_6
 - input_text.message_history_7
 
-### 5. Test It!
+**Want better dashboards?** See [DASHBOARD.md](DASHBOARD.md) for:
+- Statistics displays
+- Charts and graphs
+- Custom layouts
+- Multiple automation views
+
+### 6. Test It!
 
 Manually trigger the automation from:
 **Settings → Automations → [Your Automation] → Run**
 
 Check your dashboard to see the message history!
+
+Or create a test script from [example_scripts.yaml](example_scripts.yaml)
 
 ## Example AI Prompts
 
@@ -87,6 +105,27 @@ Your automation will now:
 - ✅ Send AI messages daily at your chosen time
 - ✅ Track last 7 messages on dashboard
 - ✅ Generate unique content every day
+
+## What's Next?
+
+Now that you're set up, explore these guides:
+
+📊 **[DASHBOARD.md](DASHBOARD.md)** - Create beautiful dashboards
+- Multiple layout styles
+- Statistics and charts
+- History visualization
+- Custom controls
+
+📈 **[REPORTING.md](REPORTING.md)** - Track your messaging
+- Statistics tracking
+- Success rates
+- Time-based reports
+- Export data
+
+📝 **[EXAMPLES.md](EXAMPLES.md)** - More configurations
+- Different use cases
+- AI prompt examples
+- Dashboard layouts
 
 ## Need Help?
 

@@ -4,8 +4,10 @@ Send personalized, AI-generated messages daily via SMS with automatic message hi
 
 ## 📚 Documentation
 
-- **[QUICKSTART.md](QUICKSTART.md)** - Fast setup guide
-- **[EXAMPLES.md](EXAMPLES.md)** - Configuration examples
+- **[QUICKSTART.md](QUICKSTART.md)** - Fast setup guide (5 minutes)
+- **[DASHBOARD.md](DASHBOARD.md)** - 📊 Dashboard layouts, visualization, and display options
+- **[REPORTING.md](REPORTING.md)** - 📈 Statistics tracking, analytics, and reporting
+- **[EXAMPLES.md](EXAMPLES.md)** - Configuration examples for different use cases
 - **[HELPER_SETUP_GUIDE.md](HELPER_SETUP_GUIDE.md)** - ⚠️ Essential guide for creating input text helpers (especially for multiple automations)
 
 ## Features
@@ -14,7 +16,8 @@ Send personalized, AI-generated messages daily via SMS with automatic message hi
 - ✅ **Customizable Prompts** - Full control over message style, tone, and content
 - ✅ **Message History** - Tracks last 7 messages with timestamps
 - ✅ **SMS Integration** - Works with goto_sms, Twilio, or any SMS service
-- ✅ **Dashboard Display** - View message history on your dashboard
+- ✅ **Dashboard Display** - View message history on your dashboard (see [DASHBOARD.md](DASHBOARD.md))
+- ✅ **Statistics & Analytics** - Track total messages sent, success rates, and trends (see [REPORTING.md](REPORTING.md))
 - ✅ **Length Control** - Automatic message truncation for SMS limits
 - ✅ **Easy Setup** - Blueprint-based configuration via UI
 
@@ -122,6 +125,7 @@ If you're creating **only one automation**, simple names work:
    - **SMS Service**: Your SMS service call (e.g., `goto_sms.send_sms`)
    - **History Slots**: Select the 7 input_text helpers you created in Step 2 (matching this automation's purpose)
    - **Max Length**: Message character limit (80 for short, 160 for standard SMS)
+   - **Message Counter** (Optional): Select a counter helper to track total messages sent (see [REPORTING.md](REPORTING.md))
 
 5. Click **Save** and give your automation a descriptive name (e.g., "Daily Golf Trash Talk" or "Morning Workout Motivation")
 
@@ -168,40 +172,65 @@ Send Time: 17:00:00
 
 ## Dashboard Display
 
+### Basic Dashboard Card
+
 Add this to your dashboard to see message history:
 
 ```yaml
 type: entities
 title: Message History (Last 7)
 entities:
-  - input_text.message_history_1
+  - entity: input_text.message_history_1
+    name: Latest
   - input_text.message_history_2
   - input_text.message_history_3
   - input_text.message_history_4
   - input_text.message_history_5
   - input_text.message_history_6
-  - input_text.message_history_7
+  - entity: input_text.message_history_7
+    name: Oldest
 show_header_toggle: false
 ```
 
+### Want More?
+
+For advanced dashboard layouts with statistics, charts, and better visualization, see **[DASHBOARD.md](DASHBOARD.md)**
+
+**Dashboard Options:**
+- Multiple layout styles (grid, vertical, markdown)
+- Statistics displays (total sent, success rates)
+- History graphs and timelines
+- Custom buttons and controls
+- Multiple automation management
+
 ## Testing
 
-### Create a Test Script
+### Quick Test
+Simply trigger your automation manually:
+1. Go to **Settings → Automations & Scenes**
+2. Find your automation (e.g., "Daily Golf Trash Talk")
+3. Click the **Run** button (▶️)
+4. Check your dashboard to verify the message appears
+
+### Create a Test Script (Optional)
+
+For easy testing from your dashboard, create a script:
 
 Go to **Settings → Automations & Scenes → Scripts → Add Script**
 
 Or add this to `scripts.yaml`:
 
 ```yaml
-test_ai_message:
-  alias: Test AI Message
-  description: Manually trigger AI message generation and send
+test_golf_message:
+  alias: Test Golf Message
+  description: Manually trigger golf message automation
   mode: single
   sequence:
-    - data:
-        entity_id: automation.YOUR_AUTOMATION_NAME_HERE
+    - action: automation.trigger
+      target:
+        entity_id: automation.daily_golf_trash_talk
+      data:
         skip_condition: true
-      action: automation.trigger
 ```
 
 Then add a button to your dashboard:
@@ -212,7 +241,7 @@ name: Send Test Message
 icon: mdi:send
 tap_action:
   action: call-service
-  service: script.test_ai_message
+  service: script.test_golf_message
 ```
 
 ## Troubleshooting
